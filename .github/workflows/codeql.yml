@@ -5,8 +5,13 @@ on:
 
 jobs:
   analyze:
-    name: Analyze (${{ matrix.language }})
-    runs-on: 'ubuntu-latest'
+    name: Analyze (c-cpp)
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/barebox/barebox/barebox-ci:latest
+      # allow mounting and devtmpfs in the container
+      options: --user=root --privileged -v /dev:/dev
+
     permissions:
       # required for all workflows
       security-events: write
@@ -18,13 +23,6 @@ jobs:
       actions: read
       contents: read
 
-    strategy:
-      fail-fast: false
-      matrix:
-        # CodeQL supports the following values keywords for 'language': 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
-        include:
-        - language: c-cpp
-          build-mode: manual
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -33,10 +31,10 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
-        languages: ${{ matrix.language }}
-        build-mode: ${{ matrix.build-mode }}
+        languages: c-cpp
+        build-mode: manual
 
-    - if: matrix.build-mode == 'manual'
+    - name: Build C Code
       shell: bash
       run: |
         make ARCH=sandbox sandbox_defconfig
@@ -45,4 +43,4 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
-        category: "/language:${{matrix.language}}"
+        category: "/language:c-cpp"
