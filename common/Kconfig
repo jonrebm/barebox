@@ -1117,6 +1117,10 @@ config TLV
 	  barebox TLV is a scheme for storing factory data on non-volatile
 	  storage. Unlike state, it's meant to be read-only.
 
+config TLV_SIGNATURE
+	bool "barebox TLV signature support"
+	select CRYPTO_BUILTIN_KEYS
+
 config TLV_DRV
 	bool "barebox TLV generic driver"
 	depends on TLV
