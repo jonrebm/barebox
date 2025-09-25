@@ -1,12 +1,6 @@
 name: build ci container
 
 on:
-  push:
-    branches:
-      - 'master'
-      - 'ci'
-    paths:
-      - 'test/Containerfile'
   workflow_dispatch: {}
 
 jobs:

@@ -1,7 +1,7 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-2.0-only
 
-CONTAINER=${CONTAINER:-ghcr.io/barebox/barebox/barebox-ci:latest}
+CONTAINER=${CONTAINER:-ghcr.io/jonrebm/barebox/barebox-ci:latest}
 export KCONFIG_ADD="common/boards/configs/disable_target_tools.config $KCONFIG_ADD"
 
 while getopts "c:uh" opt; do
