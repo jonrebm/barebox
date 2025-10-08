@@ -46,6 +46,8 @@ static struct public_key *public_key_dup(const struct public_key *key)
 	k->type = key->type;
 	if (key->key_name_hint)
 		k->key_name_hint = xstrdup(key->key_name_hint);
+	if (key->keyring)
+		k->keyring = xstrdup(key->keyring);
 	k->hash = xmemdup(key->hash, key->hashlen);
 	k->hashlen = key->hashlen;
 
