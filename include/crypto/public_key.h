@@ -15,6 +15,7 @@ struct public_key {
 	enum public_key_type type;
 	struct list_head list;
 	char *key_name_hint;
+	char *keyring;
 	unsigned char *hash;
 	unsigned int hashlen;
 
