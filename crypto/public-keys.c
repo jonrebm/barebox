@@ -17,11 +17,11 @@ const struct public_key *public_key_next(const struct public_key *prev)
 	return NULL;
 }
 
-const struct public_key *public_key_get(const char *name)
+const struct public_key *public_key_get(const char *name, const char *keyring)
 {
 	const struct public_key *key;
 
-	list_for_each_entry(key, &public_keys, list) {
+	for_each_public_key_keyring(key, keyring) {
 		if (!strcmp(key->key_name_hint, name))
 			return key;
 	}
@@ -31,8 +31,15 @@ const struct public_key *public_key_get(const char *name)
 
 int public_key_add(struct public_key *key)
 {
-	if (public_key_get(key->key_name_hint))
+	if (!key->keyring || *key->keyring == '\0') {
+		pr_warn("Aborting addition of public key: No keyring specified\n");
+		return -EINVAL;
+	}
+
+	if (public_key_get(key->key_name_hint, key->keyring)) {
+		pr_warn("Aborting addition of public key: Duplicate fit name hint\n");
 		return -EEXIST;
+	}
 
 	list_add_tail(&key->list, &public_keys);
 
