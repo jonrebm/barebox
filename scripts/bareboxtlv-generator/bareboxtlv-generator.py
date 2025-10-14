@@ -2,9 +2,15 @@
 
 import argparse
 import struct
+import sys
 
 import yaml
-from crcmod.predefined import mkPredefinedCrcFun
+
+try:
+    from crcmod.predefined import mkPredefinedCrcFun
+except ModuleNotFoundError:
+    print("Error: missing crcmod dependency", file=sys.stderr)
+    sys.exit(127)
 
 _crc32_mpeg = mkPredefinedCrcFun("crc-32-mpeg")
 
